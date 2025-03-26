@@ -1,42 +1,43 @@
-from sqlalchemy import DateTime, create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, TIMESTAMP, Date
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import func
-
-# Importando o dotenv para pegar a string de conexão
 import os
 from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# Carregar variáveis do .env
 load_dotenv()
-connect = os.getenv("CONNECT")
 
-# Importando o caminho do certificado
-caminho = os.path.abspath(os.path.join(os.getcwd(), './database/ca.pem'))
+# Configuração via Pydantic Settings
+class Settings(BaseSettings):
+    AIVEN_URL: str
+    PORT: str
 
-# Conexão
-engine = create_engine(connect, echo=True, connect_args={'ssl': {'ca': caminho}})
-# engine.execute(...)
+    class Config:
+        env_file = ".env"
 
-# Sessão
-Session = sessionmaker(bind=engine)
-session = Session()
+settings = Settings(
+    AIVEN_URL=os.getenv("AIVEN_URL"),
+    PORT=os.getenv("PORT")
+)
 
-# Base
+# Configuração do Banco de Dados
+SQLALCHEMY_DATABASE_URL = settings.AIVEN_URL
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    future=True, 
+    pool_pre_ping=True  
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 Base = declarative_base()
 
-class Usuario(Base):
-    __tablename__ = 'usuarios'
-    id_user = Column(Integer, primary_key=True, autoincrement=True)
-    cpf = Column(String(14), nullable=False, unique=True)
-    crm = Column(String(15))
-    tipo_user = Column(String(1), nullable=False)
-    nome_user = Column(String(50), nullable=False)
-    email = Column(String(200), nullable=False, unique=True)
-    senha = Column(String(200), nullable=False)
-    finalizou_crianca = Column(Integer, default=0)
-
-def cria_tabelas():
-    Base.metadata.create_all(engine)
+# Dependência para FastAPI
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
