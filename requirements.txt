@@ -1,0 +1,6 @@
+# Pacotes principais
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+pydantic
