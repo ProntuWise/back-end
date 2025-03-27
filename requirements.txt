@@ -5,3 +5,4 @@ sqlalchemy
 pymysql
 pydantic
 pytest
+dotenv
