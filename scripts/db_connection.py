@@ -5,10 +5,10 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 load_dotenv()
-connect = os.getenv("CONNECT")
+connect = os.getenv("AIVEN_URL")
 
 # Importando o caminho do certificado
-caminho = './database/ca.pem'
+caminho = './scripts/ca.pem'
 caminho_completo = os.path.abspath(os.path.join(os.getcwd(), caminho))
 
 class Conexao:
@@ -22,4 +22,6 @@ class Conexao:
         self.engine.dispose()
 
     def get_conexao(self):
-        return self.sessionq
+        return self.session
+    
+    
