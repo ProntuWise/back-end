@@ -1,27 +1,28 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-# Importando o dotenv para pegar a string de conexão
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+# Carrega a URL de conexão do banco
 connect = os.getenv("AIVEN_URL")
 
-# Importando o caminho do certificado
+# Caminho do certificado SSL
 caminho = './scripts/ca.pem'
 caminho_completo = os.path.abspath(os.path.join(os.getcwd(), caminho))
 
+# Cria o engine de conexão
+engine = create_engine(connect, echo=True, connect_args={'ssl': {'ca': caminho_completo}})
+
+# Cria uma classe para gerenciar as sessões
 class Conexao:
     def __init__(self):
-        self.engine = create_engine(connect, echo=True, connect_args={'ssl': {'ca': caminho_completo}})
-        self.Session = sessionmaker(bind=self.engine)
+        self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
 
     def fecha_conexao(self):
         self.session.close()
-        self.engine.dispose()
+        engine.dispose()
 
     def get_conexao(self):
         return self.session
-    
-    
