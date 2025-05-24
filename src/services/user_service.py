@@ -2,22 +2,33 @@ import bcrypt
 from datetime import datetime
 from src.repositories.user_repository import UserRepository
 from src.entities.user import CreateUserRequest, User
-class UserServices():
-  def createUser(self, user: CreateUserRequest):
-    repo = UserRepository()
+
+class UserServices:
+  def __init__(self, repo: UserRepository):
+      self.repo = repo
+
+  def createUser(self, user: CreateUserRequest) -> User:
     try:
-      # Validate user data
+      # Validação básica
       if not user.name or not user.email or not user.role:
-        raise ValueError("All fields are required")
+          raise ValueError("Todos os campos são obrigatórios")
+
+      # Gerar senha inicial baseada no nome + data
       password = user.name + datetime.now().strftime("%d%m%Y")
 
-      hash_password = password.encode('utf-8')
-      hash_password = bcrypt.hashpw(hash_password, bcrypt.gensalt())
+      # Hash da senha
+      hash_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-      # Create user object
-      user = User(user.name, user.email, hash_password, user.role)
-      print(user)
-      repo.createUser(user)
-      return user
+      # Criar objeto User
+      new_user = User(
+          name=user.name,
+          email=user.email,
+          password=hash_password,
+          role=user.role
+      )
+
+      # Persistir no banco
+      self.repo.createUser(new_user)
+      return new_user
     except Exception as e:
       raise Exception(f"Erro ao Criar Usuário: {e}")
