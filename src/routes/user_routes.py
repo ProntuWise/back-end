@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 
 from src.services.user_service import UserServices
 from src.entities.user import CreateUserRequest
+from src.utils.helpers import handle_database_exception
 import os
 from dotenv import load_dotenv
 
@@ -38,4 +39,4 @@ def createUser(user: CreateUserRequest):
     
     return JSONResponse(status_code=201, content={"message":"Usuário criado com sucesso!"})
   except Exception as e:
-    return JSONResponse(status_code=400, content={"message": f"{e}"})
+    handle_database_exception(e, "CreateUser")
