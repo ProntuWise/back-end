@@ -21,6 +21,24 @@ app.include_router(user_router)
 # ===========================
 # Custom Exception Handlers
 # ===========================
+TYPE_TRANSLATIONS = {
+    "missing": "campo ausente",
+    "value_error.missing": "campo ausente",
+    "type_error.integer": "tipo inválido, esperado inteiro"
+}
+
+MSG_TRANSLATIONS = {
+    "Field required": "Campo obrigatório",
+    "Input should be 'Doctor', 'Admin', 'Unique_Secretary', 'General_Secretary' or 'Full'":
+        "Entrada deve ser 'Doctor', 'Admin', 'Unique_Secretary', 'General_Secretary' ou 'Full'",
+}
+
+def traduzir_tipo(tipo: str) -> str:
+    return TYPE_TRANSLATIONS.get(tipo, tipo)
+
+def traduzir_msg(msg: str) -> str:
+    return MSG_TRANSLATIONS.get(msg, msg)
+
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
     if isinstance(exc.detail, dict) and "message" in exc.detail:
@@ -35,33 +53,17 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    errors = exc.errors()
-    messages = []
-    for err in errors:
-        loc_parts = [str(i) for i in err.get("loc", []) if i != "body"]
-        loc = ".".join(loc_parts)
-        
-        type_map = {
-            "missing": "campo ausente:",
-            "value_error.missing": "campo ausente:",
-            "type_error.integer": "tipo inválido, esperado inteiro",
-        }
-        typ = err.get("type", "")
-        typ_pt = type_map.get(typ, typ)
-        
-        msg_map = {
-            "Field required": "Campo obrigatório",
-        }
-        msg = err.get("msg", "")
-        msg_pt = msg_map.get(msg, msg)
-        
-        messages.append(f"{typ_pt} {loc} - {msg_pt}")
+    mensagens = []
 
-    full_message = "; ".join(messages)
+    for erro in exc.errors():
+        loc = ".".join(str(i) for i in erro.get("loc", []) if i != "body")
+        tipo = traduzir_tipo(erro.get("type", ""))
+        mensagem = traduzir_msg(erro.get("msg", ""))
+        mensagens.append(f"{tipo} {loc} - {mensagem}".strip())
 
     return JSONResponse(
         status_code=422,
-        content={"message": full_message}
+        content={"message": "; ".join(mensagens)},
     )
 
 if __name__ == "__main__":
