@@ -39,3 +39,7 @@ async def createUser(user: CreateUserRequest):
     return JSONResponse(status_code=201, content={"message":"Usuário criado com sucesso!"})
   except Exception as e:
     handle_database_exception(e, "CreateUser")
+
+@router.delete("")
+async def deleteUser():
+  print("deleteUser")

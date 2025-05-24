@@ -40,3 +40,7 @@ async def login(data: LoginUserRequest):
     return JSONResponse(status_code=200, content={"message":"Logado com Sucesso", "token": login})
   except Exception as e:
     handle_database_exception(e, "LoginUser")
+  
+@router.put("/change-password")
+async def changePassword():
+  print("changePassword")
