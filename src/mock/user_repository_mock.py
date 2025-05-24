@@ -41,7 +41,6 @@ class UserRepositoryMock:
         "is_first": True,
         "created_at": "2023-10-01T12:00:00Z",
       }
-      print(new_user)
       self.users.append(new_user)
       return True
     except Exception as e:
