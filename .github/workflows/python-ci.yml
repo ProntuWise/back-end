@@ -23,6 +23,7 @@ jobs:
     - name: Set environment variables
       run: |
         echo "DEV_MODE=True" >> $GITHUB_ENV
-        echo "DATABASE_URL=sqlite:///./test.db" >> $GITHUB_ENV
+        echo "AIVEN_URL=sqlite:///./test.db" >> $GITHUB_ENV
+        echo "PORT=8000" >> $GITHUB_ENV
     - name: Run tests
       run: pytest
