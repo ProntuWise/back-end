@@ -35,6 +35,8 @@ async def login(data: LoginUserRequest):
       identifier=data.identifier,
       password=data.password
     )
-    return JSONResponse(status_code=200, content={"token": login})
+    if login == "is_first":
+      return JSONResponse(status_code=200, content={"message": "Primeiro login, troque sua senha", "token": ""})
+    return JSONResponse(status_code=200, content={"message":"Logado com Sucesso", "token": login})
   except Exception as e:
     handle_database_exception(e, "LoginUser")
