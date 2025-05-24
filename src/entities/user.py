@@ -50,3 +50,7 @@ class CreateUserRequest(BaseModel):
     name: str
     role: UserTypeEnum
     email: str
+
+class LoginUserRequest(BaseModel):
+    identifier: str
+    password: str
