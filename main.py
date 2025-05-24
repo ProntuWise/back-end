@@ -5,6 +5,8 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.routes.user_routes import router as user_router
+from src.routes.auth_routes import router as auth_router
+
 
 app = FastAPI(  
     title="User Management API",
@@ -17,6 +19,7 @@ async def read_root():
     return {"message": "API is running successfully!"}
 
 app.include_router(user_router)
+app.include_router(auth_router)
 
 # ===========================
 # Custom Exception Handlers
