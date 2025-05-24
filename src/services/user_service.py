@@ -15,8 +15,8 @@ class UserServices:
       if not user.name or not user.email or not user.role:
           raise HTTPException(status_code=422, detail="Todos os campos são obrigatórios")
 
-      # Gerar senha inicial baseada no nome + data
-      password = user.name + datetime.now().strftime("%d%m%Y")
+      first_name = user.name.split()[0]
+      password = first_name + datetime.now().strftime("%d%m%Y")
 
       # Hash da senha
       hash_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
