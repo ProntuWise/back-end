@@ -18,6 +18,9 @@ async def read_root():
 
 app.include_router(user_router)
 
+# ===========================
+# Custom Exception Handlers
+# ===========================
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
     if isinstance(exc.detail, dict) and "message" in exc.detail:
