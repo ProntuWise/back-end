@@ -14,12 +14,14 @@ class AuthService:
       user = self.repo.getUserByIdentifier(identifier)
       if not user:
         raise Exception("Usuário não encontrado")
+
+      if user.is_first:
+        return "is_first"
       # verificar se a senha está correta
       if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         print("Senha incorreta")
         raise Exception("Senha incorreta")
       
-      print("Usuário autenticado com sucesso")
       # gerar token JWT
       token = jwt.encode(
         {
