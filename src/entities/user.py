@@ -10,12 +10,15 @@ class User:
         self.validateRole(role)
 
         self.name = name
-        name_parts = name.strip().split(" ")
+        prepositions = {"de", "da", "do", "das", "dos"}
+        name_parts = [part for part in name.strip().split() if part.lower() not in prepositions]
 
         if len(name_parts) > 1:
-            self.username = name_parts[0].strip().upper() + name_parts[-1].lower()
+            initials = ''.join([part[0].upper() for part in name_parts[:-1]])
+            last_name = name_parts[-1].capitalize()
+            self.username = last_name + initials
         else:
-            self.username = name_parts[0].strip().upper()
+            self.username = name_parts[0].capitalize()
 
         self.email = email
         self.password = password
