@@ -1,10 +1,11 @@
 import bcrypt
 from datetime import datetime
 from src.repositories.user_repository import UserRepository
+from src.mock.user_repository_mock import UserRepositoryMock
 from src.entities.user import CreateUserRequest, User
 
 class UserServices:
-  def __init__(self, repo: UserRepository):
+  def __init__(self, repo: UserRepository | UserRepositoryMock):
       self.repo = repo
 
   def createUser(self, user: CreateUserRequest) -> User:
