@@ -1,5 +1,6 @@
 import bcrypt
 from datetime import datetime
+from fastapi import HTTPException
 from src.repositories.user_repository import UserRepository
 from src.mock.user_repository_mock import UserRepositoryMock
 from src.entities.user import CreateUserRequest, User
@@ -12,7 +13,7 @@ class UserServices:
     try:
       # Validação básica
       if not user.name or not user.email or not user.role:
-          raise ValueError("Todos os campos são obrigatórios")
+          raise HTTPException(status_code=422, detail="Todos os campos são obrigatórios")
 
       # Gerar senha inicial baseada no nome + data
       password = user.name + datetime.now().strftime("%d%m%Y")
