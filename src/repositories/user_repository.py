@@ -9,7 +9,7 @@ class UserRepository:
     try:
       # Commmand to insert user into the database
       new_user = insert(User).values(
-        username=user.name,
+        username=user.username,
         password=user.password,
         name=user.name,
         role=user.role.value,
