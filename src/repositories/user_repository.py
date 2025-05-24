@@ -3,8 +3,6 @@ from src.models.user import User
 from src.entities.user import User as UserEntity
 from scripts.db_connection import Conexao
 class UserRepository:
-
-
   def createUser(self, user: UserEntity):
     try:
       # Commmand to insert user into the database
