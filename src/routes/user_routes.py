@@ -28,7 +28,6 @@ def createUser(user: CreateUserRequest):
       from src.repositories.user_repository import UserRepository
       repo = UserRepository()
     else:
-      print("MOCK")
       from src.mock.user_repository_mock import UserRepositoryMock
       repo = UserRepositoryMock()
     
