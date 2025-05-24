@@ -1,6 +1,3 @@
-def test_somar():
-  assert 2 + 3 == 5
-
 def test_create_user():
   from src.services.user_service import UserServices
   from src.mock.user_repository_mock import UserRepositoryMock
