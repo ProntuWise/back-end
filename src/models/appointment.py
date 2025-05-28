@@ -4,7 +4,7 @@ from src.enums.appointment_status_enum import AppointmentStatusEnum
 from src.enums.appointment_type_enum import AppointmentTypeEnum
 
 
-class Appointment(Base):
+class AppointmentModel(Base):
     __tablename__ = 'Appointment'
 
     appointment_id = Column(Integer, primary_key=True, autoincrement=True)
