@@ -7,7 +7,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from src.routes.user_routes import router as user_router
 from src.routes.auth_routes import router as auth_router
 from src.routes.schedule_tag_routes import router as schedule_tag_router
-
+from src.routes.appointment_routes import router as appointment_router
+from src.routes.patient_routes import router as patient_router
 
 app = FastAPI(  
     title="User Management API",
@@ -22,6 +23,8 @@ async def read_root():
 app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(schedule_tag_router)
+app.include_router(appointment_router)
+app.include_router(patient_router)
 
 # ===========================
 # Custom Exception Handlers
