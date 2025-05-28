@@ -6,6 +6,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.routes.user_routes import router as user_router
 from src.routes.auth_routes import router as auth_router
+from src.routes.schedule_tag_routes import router as schedule_tag_router
 
 
 app = FastAPI(  
@@ -20,6 +21,7 @@ async def read_root():
 
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(schedule_tag_router)
 
 # ===========================
 # Custom Exception Handlers
