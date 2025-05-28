@@ -5,16 +5,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-connect = os.getenv("AIVEN_URL")
+# Removendo o ssl-mode da string de conexão
+connect = os.getenv("AIVEN_URL").replace("?ssl-mode=REQUIRED", "")
 
-# Caminho do certificado SSL
-caminho = './scripts/ca.pem'
-caminho_completo = os.path.abspath(os.path.join(os.getcwd(), caminho))
+print("String de conexão:", connect)
 
 engine = create_engine(
     connect,
-    echo=True,
-    connect_args={"ssl": {"ca": caminho_completo}}
+    echo=True
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
