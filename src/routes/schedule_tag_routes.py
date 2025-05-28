@@ -1,7 +1,6 @@
 import os
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from src.repositories.schedule_tag_repository import ScheduleTagRepository, ScheduleTagRepositoryMock
 from src.schemas.schedule_tag_schema import ScheduleTagCreateRequest
 from src.services.schedule_tag_service import ScheduleTagService
 from src.utils.helpers import handle_database_exception
@@ -17,8 +16,10 @@ async def create_schedule_tag(schedule_tag: ScheduleTagCreateRequest):
             return JSONResponse(status_code=422, content={"message": "Todos os campos são obrigatórios"})
         
         if dev_mode == True:
+            from src.repositories.schedule_tag_repository import ScheduleTagRepository
             repo = ScheduleTagRepository()
-        else
+        else:
+            from src.mock.schedule_tag_repository_mock import ScheduleTagRepositoryMock
             repo = ScheduleTagRepositoryMock()
         
         schedule_tag = ScheduleTagService(repo).create_schedule_tag(schedule_tag)
