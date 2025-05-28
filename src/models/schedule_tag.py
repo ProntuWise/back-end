@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text
 from scripts.base import Base
 
-class ScheduleTag(Base):
+class ScheduleTagModel(Base):
     __tablename__ = 'ScheduleTag'
 
     schedule_tag_id = Column(Integer, primary_key=True, autoincrement=True)
