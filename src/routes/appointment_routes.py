@@ -1,0 +1,43 @@
+import os
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from src.schemas.appointment_schema import AppointmentCreateRequest
+from src.services.appointment_service import AppointmentService
+from src.utils.helpers import handle_database_exception
+
+
+dev_mode = os.getenv("DEV_MODE")
+router = APIRouter()
+
+@router.post("/create-appointment", response_model=AppointmentCreateRequest)
+async def create_appointment(appointment: AppointmentCreateRequest):
+    try:
+        # Validação dos campos obrigatórios
+        if not appointment.date or not appointment.time or not appointment.duration:
+            return JSONResponse(status_code=422, content={"message": "Data, hora e duração são campos obrigatórios"})
+        
+        if not appointment.patient_id or not appointment.user_id:
+            return JSONResponse(status_code=422, content={"message": "ID do paciente e do usuário são obrigatórios"})
+        
+        # Inicialização do repositório baseado no modo
+        if dev_mode == True:
+            from src.repositories.appointment_repository import AppointmentRepository
+            repo = AppointmentRepository()
+        else:
+            from src.mock.appointment_repository_mock import AppointmentRepositoryMock
+            repo = AppointmentRepositoryMock()
+        
+        # Criação do agendamento
+        created_appointment = AppointmentService(repo).create_appointment(appointment)
+        
+        if not created_appointment:
+            return JSONResponse(status_code=400, content={"message": "Erro ao criar agendamento"})
+    
+        return JSONResponse(
+            status_code=201, 
+            content={
+                "message": "Agendamento criado com sucesso!",
+            }
+        )
+    except Exception as e:
+        return handle_database_exception(e, "CreateAppointment")
