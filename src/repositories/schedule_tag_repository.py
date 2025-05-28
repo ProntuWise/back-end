@@ -3,7 +3,7 @@ from scripts.db_connection import Conexao
 from src.entities.schedule_tag import ScheduleTagEntity
 from src.models.schedule_tag import ScheduleTagModel
 
-class ScheduleTagRepositoryMock:        
+class ScheduleTagRepository:        
    def create_schedule_tag(self, schedule_tag: ScheduleTagEntity):
         try:
            print("Iniciando criação de schedule tag...")
