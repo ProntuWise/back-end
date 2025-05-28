@@ -3,7 +3,8 @@ from datetime import datetime
 from fastapi import HTTPException
 from src.repositories.user_repository import UserRepository
 from src.mock.user_repository_mock import UserRepositoryMock
-from src.entities.user import CreateUserRequest, User
+from src.entities.user import  User
+from src.schemas.user_schema import CreateUserRequest
 
 class UserServices:
   def __init__(self, repo: UserRepository | UserRepositoryMock):
