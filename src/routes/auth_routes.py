@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from src.services.auth_service import AuthService
-from src.entities.user import LoginUserRequest
+from src.schemas.user_schema import LoginUserRequest
 from src.utils.helpers import handle_database_exception
 import os
 from dotenv import load_dotenv
@@ -16,7 +16,7 @@ router = APIRouter(
   tags=["auth"]
 )
 
-@router.post("")
+@router.post("/login")
 async def login(data: LoginUserRequest):
   try:
     if not data.identifier or not data.password:
