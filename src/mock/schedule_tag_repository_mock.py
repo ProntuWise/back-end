@@ -3,16 +3,16 @@
 from src.entities.schedule_tag import ScheduleTagEntity
 
 
-class ScheduleTagRepositoryTag:
+class ScheduleTagRepositoryMock:
   def __init__(self):
     self.schedule_tags = [
       {
-        "schedule_tag_id": 1
+        "schedule_tag_id": 1,
         "name": "Tag 24",
         "description": "Tag 24",
       },
       {
-        "schedule_tag_id": 2 
+        "schedule_tag_id": 2 ,
         "name": "Tag 2",
         "description": "Tag 2",
       },
