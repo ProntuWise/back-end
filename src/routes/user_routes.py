@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
+from src.schemas.user_schema import CreateUserRequest
 from src.services.user_service import UserServices
-from src.entities.user import CreateUserRequest
+
 from src.utils.helpers import handle_database_exception
 import os
 from dotenv import load_dotenv
@@ -16,7 +17,7 @@ router = APIRouter(
   tags=["users"]
 )
 
-@router.post("")
+@router.post("/create-user")
 async def createUser(user: CreateUserRequest):
   try:
     # Validate user data
