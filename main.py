@@ -4,6 +4,8 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from src.utils.middlewares import AuthMiddleware
+
 from src.routes.user_routes import router as user_router
 from src.routes.auth_routes import router as auth_router
 from src.routes.schedule_tag_routes import router as schedule_tag_router
@@ -19,6 +21,8 @@ app = FastAPI(
 @app.get("/")
 async def read_root():
     return {"message": "API is running successfully!"}
+
+app.add_middleware(AuthMiddleware)
 
 app.include_router(user_router)
 app.include_router(auth_router)
