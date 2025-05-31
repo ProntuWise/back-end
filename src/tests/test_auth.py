@@ -1,7 +1,7 @@
 def test_login_user():
   from src.services.auth_service import AuthService
   from src.mock.user_repository_mock import UserRepositoryMock
-  from src.entities.user import LoginUserRequest
+  from src.schemas.user_schema import LoginUserRequest
 
   # Mock the repository
   repo = UserRepositoryMock()
