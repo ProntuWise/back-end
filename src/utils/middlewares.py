@@ -8,6 +8,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
   async def dispatch(self, request: Request, call_next):
     # Permitir rotas públicas (como login ou docs) — opcional
     if request.url.path in [
+      # "/",
       "/auth/login", 
       "/docs", 
       "/openapi.json"
@@ -30,19 +31,26 @@ class AuthMiddleware(BaseHTTPMiddleware):
           status_code=401,
           content={"message": "Esquema de autenticação inválido. Use 'Bearer'."}
         )
-
+      
+      print(token)
       payload = jwt.decode(
         token,
-        os.getenv("SECRET_KEY"),
-        algorithms=["HS256"]
+        "secret_key",
+        algorithm=["HS256"]
       )
+      print(payload)
 
       request.state.user = payload
 
       response = await call_next(request)
       return response
 
-    except jwt.PyJWTError:
+    except jwt.ExpiredSignatureError:
+      return JSONResponse(
+        status_code=401,
+        content={"message": "Token de autenticação expirado."}
+      )
+    except jwt.InvalidTokenError:
       return JSONResponse(
         status_code=401,
         content={"message": "Token de autenticação inválido."}
