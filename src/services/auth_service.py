@@ -3,6 +3,7 @@ import bcrypt
 from datetime import datetime, timedelta
 from src.mock.user_repository_mock import UserRepositoryMock
 from src.repositories.user_repository import UserRepository
+import time
 
 class AuthService:
   def __init__(self, repo: UserRepository | UserRepositoryMock):
@@ -23,15 +24,22 @@ class AuthService:
         raise Exception("Senha incorreta")
       
       # gerar token JWT
+      expiration = datetime.utcnow() + timedelta(hours=2)
+      exp_timestamp = int(expiration.timestamp())
+      
+      print("Tempo atual UTC:", datetime.utcnow())
+      print("Tempo expiração:", expiration)
+      print("Timestamp expiração:", exp_timestamp)
+      
       token = jwt.encode(
         {
           "user_id": user.user_id,
           "username": user.username,
           "role": user.role.value,
-          "exp": datetime.now() + timedelta(hours=2)
+          "exp": exp_timestamp
         },
         "secret_key",
-        algorithm=["HS256"]
+        algorithm="HS256"
       )
 
       return token
