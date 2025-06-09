@@ -31,7 +31,7 @@ class AuthService:
           "exp": datetime.now() + timedelta(hours=2)
         },
         "secret_key",
-        algorithm="HS256"
+        algorithm=["HS256"]
       )
 
       return token
