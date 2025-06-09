@@ -10,7 +10,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
     if request.url.path in [
       "/auth/login", 
       "/docs", 
-      "/openapi.json"
+      "/openapi.json",
+      "/users/create-user",
+      "/patients/create-patient"
     ]:
       return await call_next(request)
 
