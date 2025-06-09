@@ -35,3 +35,14 @@ class UserServices:
       return new_user
     except Exception as e:
       raise Exception(f"Erro ao Criar Usuário: {e}")
+
+  def deleteUser(self, user_id: int) -> None:
+    try:
+      userExists = self.repo.getUserById(user_id)
+      if not userExists:
+         raise HTTPException(status_code=204, detail="Usuário não encontrado")
+
+      self.repo.deleteUser(user_id)
+      return None
+    except Exception as e:
+       raise Exception(f"Erro ao Deletar Usuário: {e}") 
