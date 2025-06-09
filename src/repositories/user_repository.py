@@ -1,4 +1,4 @@
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, delete
 from src.models.user import User
 from src.entities.user import User as UserEntity
 from scripts.db_connection import Conexao
@@ -50,3 +50,36 @@ class UserRepository:
     finally:
       if session:
         session.close()
+
+  def getUserById(self, user_id: int):
+    try:
+      query = select(User).where(User.user_id == user_id)
+
+      with Conexao().session as session:
+        result = session.execute(query).scalars().first()
+      return result
+    except SQLAlchemyError as e:
+      raise Exception("Erro interno ao acessar o banco de dados.")
+    except Exception as e:
+      raise Exception("Erro inesperado ao buscar usuário.")
+    finally:
+      if session:
+        session.close()
+
+  def deleteUser(self, user_id: int):
+    try:
+      query = delete(User).where(User.user_id == user_id)
+
+      with Conexao().session as session:
+        session.execute(query)
+        session.commit()
+      return True
+    
+    except SQLAlchemyError as e:
+      raise Exception("Erro interno ao acessar o banco de dados.")
+    except Exception as e:
+      raise Exception("Erro inesperado ao deletar usuário.")
+    finally:
+      if session:
+        session.close()
+  

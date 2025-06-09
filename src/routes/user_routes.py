@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from src.schemas.user_schema import CreateUserRequest
@@ -13,11 +13,11 @@ load_dotenv()
 dev_mode = os.getenv("DEV_MODE")
 
 router = APIRouter(
-  prefix="/users",
+  prefix="/user",
   tags=["users"]
 )
 
-@router.post("/create-user")
+@router.post("")
 async def createUser(user: CreateUserRequest):
   try:
     # Validate user data
@@ -42,5 +42,11 @@ async def createUser(user: CreateUserRequest):
     handle_database_exception(e, "CreateUser")
 
 @router.delete("")
-async def deleteUser():
-  print("deleteUser")
+async def deleteUser(request: Request):
+  try:
+    user = request.state.user
+    print("Usuário autenticado:", user)
+    
+    return JSONResponse(status_code=200, content={"message": "Usuário autenticado com sucesso!"})
+  except Exception as e:
+    handle_database_exception(e, "DeleteUser")
