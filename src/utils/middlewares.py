@@ -8,10 +8,10 @@ from datetime import datetime
 class AuthMiddleware(BaseHTTPMiddleware):
   async def dispatch(self, request: Request, call_next):
     if request.url.path in [
-      # "/",
+      "/",
       "/auth/login", 
       "/docs", 
-      "/openapi.json",
+      "/openapi.json"
     ]:
       return await call_next(request)
 
