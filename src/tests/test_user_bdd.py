@@ -62,3 +62,40 @@ def verify_user_data():
     assert user.email == user_data['email']
     assert user.role.value == user_data['role'].value
     assert user.password is not None
+
+# ==========================================
+# Deletar um usuário existente
+# ==========================================
+
+@scenario(feature_file, 'Deletar um usuário existente')
+def test_delete_user():
+    pass
+
+@given(parsers.parse('existe um usuário com ID {user_id:d}'))
+def user_exists(user_id):
+    global user_data, user, repo, user_service
+    # Criamos um usuário primeiro para garantir que existe
+    repo = UserRepositoryMock()
+    user_service = UserServices(repo)
+    user_data = {
+        'name': "Isaias Cano Bello da Luz",
+        'email': "isaias@gmail.com",
+        'password': "ajdbhfuy498u31br89341&*#Y$*@#oihfweo",
+        'role': UserTypeEnum.Doctor
+    }
+    user = User(**user_data)
+    user.user_id = user_id
+    repo.createUser(user)
+    
+@when('eu deletar o usuário')
+def delete_user():
+    global user, repo, user_service
+    message = user_service.deleteUser(user.user_id)
+    assert message is None
+
+@then('o usuário deve ser removido com sucesso')
+def verify_user_deleted():
+    global repo, user
+    # Tentar buscar o usuário deve retornar None
+    deleted_user = repo.getUserById(user.user_id)
+    assert deleted_user is None
