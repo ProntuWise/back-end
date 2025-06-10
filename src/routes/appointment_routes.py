@@ -8,10 +8,11 @@ from src.utils.helpers import handle_database_exception
 
 dev_mode = os.getenv("DEV_MODE")
 router = APIRouter(
+    prefix="/appointment",
     tags=["appointments"]
 )
 
-@router.post("/create-appointment", response_model=AppointmentCreateRequest)
+@router.post("", response_model=AppointmentCreateRequest)
 async def create_appointment(appointment: AppointmentCreateRequest):
     try:
         # Validação dos campos obrigatórios
@@ -43,3 +44,24 @@ async def create_appointment(appointment: AppointmentCreateRequest):
         )
     except Exception as e:
         return handle_database_exception(e, "CreateAppointment")
+
+@router.get("")
+async def get_all_appointments():
+    try:
+        if dev_mode == "True":
+            from src.repositories.appointment_repository import AppointmentRepository
+            repo = AppointmentRepository()
+        else:
+            from src.mock.appointment_repository_mock import AppointmentRepositoryMock
+            repo = AppointmentRepositoryMock()
+        
+        appointments = AppointmentService(repo).get_appointments()
+        return JSONResponse(
+            status_code=200,
+            content={
+                "message": "Agendamentos buscados com sucesso!",
+                "appointments": appointments
+            }
+        )
+    except Exception as e:
+        return handle_database_exception(e, "GetAllAppointments")
