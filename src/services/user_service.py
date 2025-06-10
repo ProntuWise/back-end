@@ -45,4 +45,17 @@ class UserServices:
       self.repo.deleteUser(user_id)
       return None
     except Exception as e:
-       raise Exception(f"Erro ao Deletar Usuário: {e}") 
+       raise Exception(f"Erro ao Deletar Usuário: {e}")   
+    
+  def changePassword(self, identifier: str, new_password: str) -> None:
+    try:
+      user = self.repo.getUserByIdentifier(identifier)
+      if not user:
+        raise HTTPException(status_code=204, detail="Usuário não encontrado")
+      
+      hash_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+      self.repo.updatePasswordUser(identifier, hash_password)
+      return None
+    except Exception as e:
+      raise Exception(f"Erro ao Alterar Senha: {e}")

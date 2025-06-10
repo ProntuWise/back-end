@@ -9,6 +9,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
   async def dispatch(self, request: Request, call_next):
     if request.url.path in [
       "/",
+      "/auth/change-password",
       "/auth/login", 
       "/docs", 
       "/openapi.json"

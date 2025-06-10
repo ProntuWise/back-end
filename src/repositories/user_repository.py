@@ -1,4 +1,4 @@
-from sqlalchemy import insert, select, delete
+from sqlalchemy import insert, select, delete, update
 from src.models.user import User
 from src.entities.user import User as UserEntity
 from scripts.db_connection import Conexao
@@ -83,3 +83,17 @@ class UserRepository:
       if session:
         session.close()
   
+  def updatePasswordUser(self, identifier: str, new_password: str):
+    try:
+      query = update(User).where(
+        (User.username == identifier) | (User.email == identifier)
+      ).values(
+        password=new_password, 
+        is_first=False
+      )
+      with Conexao().session as session:
+        session.execute(query)
+        session.commit()
+      return True
+    except SQLAlchemyError as e:
+      raise Exception("Erro interno ao acessar o banco de dados.")

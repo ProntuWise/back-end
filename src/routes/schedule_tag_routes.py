@@ -7,7 +7,9 @@ from src.utils.helpers import handle_database_exception
 
 
 dev_mode = os.getenv("DEV_MODE")
-router = APIRouter()
+router = APIRouter(
+    tags=["schedule_tags"]
+)
 
 @router.post("/create-schedule-tag", response_model=ScheduleTagCreateRequest)
 async def create_schedule_tag(schedule_tag: ScheduleTagCreateRequest):

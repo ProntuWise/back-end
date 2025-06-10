@@ -7,7 +7,9 @@ from src.utils.helpers import handle_database_exception
 
 
 dev_mode = os.getenv("DEV_MODE")
-router = APIRouter()
+router = APIRouter(
+    tags=["appointments"]
+)
 
 @router.post("/create-appointment", response_model=AppointmentCreateRequest)
 async def create_appointment(appointment: AppointmentCreateRequest):
