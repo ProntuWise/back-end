@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from src.schemas.appointment_schema import AppointmentCreateRequest
+from src.schemas.appointment_schema import AppointmentCreateRequest, AppointmentUpdateRequest
 from src.services.appointment_service import AppointmentService
 from src.utils.helpers import handle_database_exception
 
@@ -65,3 +65,24 @@ async def get_all_appointments():
         )
     except Exception as e:
         return handle_database_exception(e, "GetAllAppointments")
+
+@router.put("/{appointment_id}")
+async def update_appointment(appointment_id: int, appointment: AppointmentUpdateRequest):
+    try:
+        if dev_mode == "True":
+            from src.repositories.appointment_repository import AppointmentRepository
+            repo = AppointmentRepository()
+        else:
+            from src.mock.appointment_repository_mock import AppointmentRepositoryMock
+            repo = AppointmentRepositoryMock()
+        
+        AppointmentService(repo).update_appointment(appointment_id, appointment)
+        
+        return JSONResponse(
+            status_code=200,
+            content={
+                "message": "Agendamento atualizado com sucesso!",
+            }
+        )
+    except Exception as e:
+        return handle_database_exception(e, "UpdateAppointment")
