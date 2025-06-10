@@ -42,4 +42,12 @@ class AppointmentService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Erro ao criar agendamento: {str(e)}")
 
+    def get_appointments(self):
+        try:
+            appointments = self.repo.get_appointments()
+            return appointments
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Erro ao buscar agendamentos: {str(e)}")
     
