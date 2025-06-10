@@ -59,3 +59,12 @@ class AppointmentService:
             raise e
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Erro ao atualizar agendamento: {str(e)}")
+
+    def delete_appointment(self, appointment_id: int):
+        try:
+            deleted_appointment = self.repo.delete_appointment(appointment_id)
+            return deleted_appointment
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Erro ao deletar agendamento: {str(e)}")
