@@ -21,3 +21,26 @@ def test_login_user():
 
   assert token is not None
   assert isinstance(token, str)
+
+def test_change_password():
+  from src.services.user_service import UserServices
+  from src.mock.user_repository_mock import UserRepositoryMock
+  from src.schemas.user_schema import ChangePasswordRequest
+
+  # Mock the repository
+  repo = UserRepositoryMock()
+  user_service = UserServices(repo)
+
+  # Create a mock change password request
+  change_password_request = ChangePasswordRequest(
+    identifier="John@gmail.com",
+    new_password="senha123",
+  )
+
+  # Call the change password method
+  message = user_service.changePassword(
+    identifier=change_password_request.identifier,
+    new_password="senha456"
+  )
+
+  assert message is None
