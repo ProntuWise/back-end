@@ -17,4 +17,11 @@ Feature: Gerenciamento de Consultas
         And o tipo de consulta é "First_Visit"
         When eu criar a consulta
         Then a consulta deve ser criada com sucesso
-        And os dados da consulta devem estar corretos 
+        And os dados da consulta devem estar corretos
+
+    Scenario: Listar todas as consultas
+        Given que sou um profissional da clínica
+        And existe pelo menos uma consulta cadastrada
+        When eu solicitar a lista de consultas
+        Then devo receber uma lista não vazia de consultas
+        And os dados das consultas devem estar corretos 

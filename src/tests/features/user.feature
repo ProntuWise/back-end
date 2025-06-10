@@ -12,4 +12,10 @@ Feature: Gerenciamento de Usuários
         And o tipo de usuário é "Doctor"
         When eu cadastrar o usuário
         Then o usuário deve ser cadastrado com sucesso
-        And os dados do usuário devem estar corretos 
+        And os dados do usuário devem estar corretos
+
+    Scenario: Deletar um usuário existente
+        Given que sou um administrador do sistema
+        And existe um usuário com ID 1
+        When eu deletar o usuário
+        Then o usuário deve ser removido com sucesso 
