@@ -19,6 +19,8 @@ app = FastAPI(
     description="API for managing users.",
 )
 
+app.add_middleware(AuthMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
@@ -30,8 +32,6 @@ app.add_middleware(
 @app.get("/")
 async def read_root():
     return {"message": "API is running successfully!"}
-
-app.add_middleware(AuthMiddleware)
 
 app.include_router(user_router)
 app.include_router(auth_router)

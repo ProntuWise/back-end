@@ -17,7 +17,7 @@ router = APIRouter(
   tags=["users"]
 )
 
-@router.post("")
+@router.post("/create-user")
 async def createUser(user: CreateUserRequest):
   try:
     # Validate user data
