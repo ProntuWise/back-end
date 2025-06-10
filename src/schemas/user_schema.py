@@ -13,3 +13,7 @@ class CreateUserRequest(BaseModel):
 class LoginUserRequest(BaseModel):
     identifier: str
     password: str
+
+class ChangePasswordRequest(BaseModel):
+    identifier: str
+    new_password: str
