@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from src.entities.appointment import AppointmentEntity
 from src.repositories.appointment_repository import AppointmentRepository
-from src.schemas.appointment_schema import AppointmentCreateRequest
+from src.schemas.appointment_schema import AppointmentCreateRequest, AppointmentUpdateRequest
 
 class AppointmentService:
     def __init__(self, repo: AppointmentRepository):
@@ -51,3 +51,11 @@ class AppointmentService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Erro ao buscar agendamentos: {str(e)}")
     
+    def update_appointment(self, appointment_id: int, request: AppointmentUpdateRequest):
+        try:
+            updated_appointment = self.repo.update_appointment(appointment_id, request)
+            return updated_appointment
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Erro ao atualizar agendamento: {str(e)}")
