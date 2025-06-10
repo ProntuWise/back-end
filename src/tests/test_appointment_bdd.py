@@ -92,4 +92,59 @@ def verify_appointment_data():
     assert appointment.tag_id == appointment_data['tag_id']
     assert appointment.description == appointment_data['description']
     assert appointment.status == appointment_data['status']
-    assert appointment.appointment_type == appointment_data['appointment_type'] 
+    assert appointment.appointment_type == appointment_data['appointment_type']
+
+# ==========================================
+# Listar todas as consultas
+# ==========================================
+
+@scenario(feature_file, 'Listar todas as consultas')
+def test_list_appointments():
+    pass
+
+@given('existe pelo menos uma consulta cadastrada')
+def appointment_exists():
+    global appointment_data, appointment, repo, appointment_service
+    # Criamos uma consulta primeiro para garantir que existe
+    repo = AppointmentRepositoryMock()
+    appointment_service = AppointmentService(repo)
+    
+    appointment_data = {
+        'date': date(2024, 3, 20),
+        'time': time(14, 30),
+        'duration': 30,
+        'patient_id': 1,
+        'user_id': 1,
+        'tag_id': 1,
+        'description': "Consulta de rotina",
+        'status': "Confirmed",
+        'appointment_type': "First_Visit"
+    }
+    
+    appointment_request = AppointmentCreateRequest(**appointment_data)
+    appointment = appointment_service.create_appointment(appointment_request)
+
+@when('eu solicitar a lista de consultas')
+def list_appointments():
+    global appointments, repo, appointment_service
+    appointments = appointment_service.get_appointments()
+
+@then('devo receber uma lista não vazia de consultas')
+def verify_appointments_list():
+    assert appointments is not None
+    assert len(appointments) > 0
+
+@then('os dados das consultas devem estar corretos')
+def verify_appointments_data():
+    # Verificamos o primeiro appointment que criamos
+    first_appointment = appointments[0]
+    assert first_appointment.appointment_id == appointment.appointment_id
+    assert str(first_appointment.date) == str(appointment_data['date'])
+    assert str(first_appointment.time) == str(appointment_data['time'])
+    assert first_appointment.duration == appointment_data['duration']
+    assert first_appointment.patient_id == appointment_data['patient_id']
+    assert first_appointment.user_id == appointment_data['user_id']
+    assert first_appointment.tag_id == appointment_data['tag_id']
+    assert first_appointment.description == appointment_data['description']
+    assert first_appointment.status == appointment_data['status']
+    assert first_appointment.appointment_type == appointment_data['appointment_type'] 
