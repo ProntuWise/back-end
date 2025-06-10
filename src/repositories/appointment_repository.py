@@ -3,6 +3,8 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from scripts.db_connection import Conexao
 from src.entities.appointment import AppointmentEntity
 from src.models.appointment import AppointmentModel
+from src.schemas.appointment_schema import AppointmentCreateRequest, AppointmentUpdateRequest
+from fastapi import HTTPException
 
 class AppointmentRepository:        
     def create_appointment(self, appointment: AppointmentEntity):
@@ -90,3 +92,44 @@ class AppointmentRepository:
             if session:
                 print("Fechando sessão...")
                 session.close()
+    
+    def update_appointment(self, appointment_id: int, request: AppointmentUpdateRequest):
+        try:
+            with Conexao().session as session:
+                appointment = session.query(AppointmentModel).filter(AppointmentModel.appointment_id == appointment_id).first()
+                if not appointment:
+                    raise HTTPException(status_code=404, detail="Agendamento não encontrado")
+                
+                # Atualiza apenas os campos que foram fornecidos
+                if request.date is not None:
+                    appointment.date = request.date
+                if request.time is not None:
+                    appointment.time = request.time
+                if request.duration is not None:
+                    appointment.duration = request.duration
+                if request.patient_id is not None:
+                    appointment.patient_id = request.patient_id
+                if request.user_id is not None:
+                    appointment.user_id = request.user_id
+                if request.tag_id is not None:
+                    appointment.tag_id = request.tag_id
+                if request.description is not None:
+                    appointment.description = request.description
+                if request.status is not None:
+                    appointment.status = request.status
+                if request.appointment_type is not None:
+                    appointment.appointment_type = request.appointment_type
+                
+                session.commit()
+                return appointment
+        except SQLAlchemyError as e:
+            print(f"Erro do SQLAlchemy ao atualizar appointment: {str(e)}")
+            raise Exception(f"Erro ao atualizar banco de dados: {str(e)}")
+        except Exception as e:
+            print(f"Erro inesperado ao atualizar appointment: {str(e)}")
+            raise Exception(f"Erro interno: {str(e)}")
+        finally:
+            if session:
+                print("Fechando sessão...")
+                session.close()
+    
