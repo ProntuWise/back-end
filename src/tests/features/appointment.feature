@@ -24,4 +24,24 @@ Feature: Gerenciamento de Consultas
         And existe pelo menos uma consulta cadastrada
         When eu solicitar a lista de consultas
         Then devo receber uma lista não vazia de consultas
-        And os dados das consultas devem estar corretos 
+        And os dados das consultas devem estar corretos
+
+    Scenario: Atualizar uma consulta existente
+        Given que sou um profissional da clínica
+        And existe uma consulta cadastrada
+        And quero atualizar os dados da consulta
+        And a nova data é "2024-03-21"
+        And o novo horário é "15:30"
+        And a nova duração será de 45 minutos
+        And a nova descrição é "Consulta de retorno"
+        And o novo status é "Scheduled"
+        When eu atualizar a consulta
+        Then a consulta deve ser atualizada com sucesso
+        And os novos dados da consulta devem estar corretos
+
+    Scenario: Excluir uma consulta
+        Given que sou um profissional da clínica
+        And existe uma consulta cadastrada
+        When eu excluir a consulta
+        Then a consulta deve ser excluída com sucesso
+        And a consulta não deve mais existir no sistema 
