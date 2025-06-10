@@ -86,3 +86,24 @@ async def update_appointment(appointment_id: int, appointment: AppointmentUpdate
         )
     except Exception as e:
         return handle_database_exception(e, "UpdateAppointment")
+
+@router.delete("/{appointment_id}")
+async def delete_appointment(appointment_id: int):
+    try:
+        if dev_mode == "True":
+            from src.repositories.appointment_repository import AppointmentRepository
+            repo = AppointmentRepository()
+        else:
+            from src.mock.appointment_repository_mock import AppointmentRepositoryMock
+            repo = AppointmentRepositoryMock()
+        
+        AppointmentService(repo).delete_appointment(appointment_id)
+        
+        return JSONResponse(
+            status_code=200,
+            content={
+                "message": "Agendamento deletado com sucesso!",
+            }
+        )
+    except Exception as e:
+        return handle_database_exception(e, "DeleteAppointment")
