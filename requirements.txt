@@ -10,3 +10,4 @@ bcrypt
 PyJWT
 openai
 PyPDF2
+pytest-bdd
