@@ -15,7 +15,7 @@ class UserRepositoryMock:
         "role": "Doctor",
         "is_active": True,
         "username": "JohnDoe",
-        "is_first": False,
+        "is_first": True,
         "created_at": "2023-10-01T12:00:00Z"
       },
       {
@@ -26,7 +26,7 @@ class UserRepositoryMock:
         "role": "Doctor",
         "is_active": True,
         "username": "JaneDoe",
-        "is_first": False,
+        "is_first": True,
         "created_at": "2023-10-01T12:00:00Z"
       },
     ]
@@ -70,3 +70,14 @@ class UserRepositoryMock:
       return None
     except Exception as e:
       raise Exception(f"Erro ao buscar usuário: {e}")
+  
+  def updatePasswordUser(self, identifier: str, new_password: str):
+    try:
+      for user in self.users:
+        if user["email"] == identifier or user["username"] == identifier:
+          user["password"] = new_password
+          return True
+      return False
+    except Exception as e:
+      raise Exception(f"Erro ao atualizar senha: {e}")
+  
