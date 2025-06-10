@@ -133,3 +133,23 @@ class AppointmentRepository:
                 print("Fechando sessão...")
                 session.close()
     
+    def delete_appointment(self, appointment_id: int):
+        try:
+            with Conexao().session as session:
+                appointment = session.query(AppointmentModel).filter(AppointmentModel.appointment_id == appointment_id).first()
+                if not appointment:
+                    raise HTTPException(status_code=404, detail="Agendamento não encontrado")
+                
+                session.delete(appointment)
+                session.commit()
+                return appointment
+        except SQLAlchemyError as e:
+            print(f"Erro do SQLAlchemy ao deletar appointment: {str(e)}")
+            raise Exception(f"Erro ao deletar banco de dados: {str(e)}")
+        except Exception as e:
+            print(f"Erro inesperado ao deletar appointment: {str(e)}")
+            raise Exception(f"Erro interno: {str(e)}")
+        finally:
+            if session:
+                print("Fechando sessão...")
+                session.close()
