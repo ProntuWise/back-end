@@ -8,3 +8,5 @@ pytest
 dotenv
 bcrypt
 PyJWT
+openai
+PyPDF2
