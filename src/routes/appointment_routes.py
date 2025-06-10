@@ -23,7 +23,7 @@ async def create_appointment(appointment: AppointmentCreateRequest):
             return JSONResponse(status_code=422, content={"message": "ID do paciente e do usuário são obrigatórios"})
         
         # Inicialização do repositório baseado no modo
-        if dev_mode == True:
+        if dev_mode == "True":
             from src.repositories.appointment_repository import AppointmentRepository
             repo = AppointmentRepository()
         else:

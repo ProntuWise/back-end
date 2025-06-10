@@ -18,7 +18,7 @@ async def create_patient(patient: PatientCreateRequest):
         if not patient.name or not patient.cpf:
             return JSONResponse(status_code=422, content={"message": "Nome e CPF são campos obrigatórios"})
         
-        if dev_mode == True:
+        if dev_mode == "True":
             from src.repositories.patient_repository import PatientRepository
             repo = PatientRepository()
         else:
