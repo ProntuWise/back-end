@@ -22,3 +22,6 @@ class AppointmentRepositoryMock:
         except Exception as e:
             print(f"Erro no mock ao criar agendamento: {str(e)}")
             raise Exception(f"Erro interno do mock: {str(e)}") 
+    
+    def get_appointments(self):
+        return self.appointments
