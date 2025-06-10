@@ -71,6 +71,25 @@ class UserRepositoryMock:
     except Exception as e:
       raise Exception(f"Erro ao buscar usuário: {e}")
   
+  def getUserById(self, user_id: int):
+    try:
+      for user in self.users:
+        if user["user_id"] == user_id:
+          return UserModel(
+            user_id=user["user_id"],
+            name=user["name"],
+            email=user["email"],
+            password=user["password"],
+            role=UserTypeEnum(user["role"]),
+            is_active=user["is_active"],
+            username=user["username"],
+            is_first=user["is_first"],
+            created_at=user["created_at"]
+          )
+      return None
+    except Exception as e:
+      raise Exception(f"Erro ao buscar usuário: {e}")
+
   def updatePasswordUser(self, identifier: str, new_password: str):
     try:
       for user in self.users:
@@ -81,3 +100,13 @@ class UserRepositoryMock:
     except Exception as e:
       raise Exception(f"Erro ao atualizar senha: {e}")
   
+  def deleteUser(self, user_id: int):
+    try:
+      for user in self.users:
+        if user["user_id"] == user_id:
+          self.users.remove(user)
+          return True
+      return False
+    except Exception as e:
+      raise Exception(f"Erro ao deletar usuário: {e}")
+    
