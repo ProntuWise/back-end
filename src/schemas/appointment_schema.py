@@ -14,3 +14,14 @@ class AppointmentCreateRequest(BaseModel):
     description: str
     status: AppointmentStatusEnum
     appointment_type: AppointmentTypeEnum
+
+class AppointmentUpdateRequest(BaseModel):
+    date: str | None = None
+    time: str | None = None
+    duration: int | None = None
+    patient_id: int | None = None
+    user_id: int | None = None
+    tag_id: int | None = None
+    description: str | None = None
+    status: AppointmentStatusEnum | None = None
+    appointment_type: AppointmentTypeEnum | None = None

@@ -20,3 +20,18 @@ def test_create_user():
   assert user.email == "isaias@gmail.com"
   assert user.role.value == "Doctor"
   assert user.password is not None
+
+def test_delete_user():
+  from src.services.user_service import UserServices
+  from src.mock.user_repository_mock import UserRepositoryMock
+  from src.entities.user import User
+  from src.enums.user_type_enum import UserTypeEnum
+  from datetime import datetime
+
+  # Mock the repository
+  repo = UserRepositoryMock()
+  user_service = UserServices(repo)
+
+  message = user_service.deleteUser(1)
+
+  assert message is None

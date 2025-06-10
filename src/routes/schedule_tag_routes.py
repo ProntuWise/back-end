@@ -18,7 +18,7 @@ async def create_schedule_tag(schedule_tag: ScheduleTagCreateRequest):
         if not schedule_tag.name or not schedule_tag.description:
             return JSONResponse(status_code=422, content={"message": "Todos os campos são obrigatórios"})
         
-        if dev_mode == True:
+        if dev_mode == "True":
             from src.repositories.schedule_tag_repository import ScheduleTagRepository
             repo = ScheduleTagRepository()
         else:

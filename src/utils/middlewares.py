@@ -39,9 +39,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
           "secret_key",
           algorithms=["HS256"]
         )
-        print("Payload decodificado:", payload)
-        if "exp" in payload:
-          print("Tempo de expiração:", datetime.fromtimestamp(payload["exp"]))
 
         request.state.user = payload
 
