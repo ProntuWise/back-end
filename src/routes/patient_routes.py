@@ -7,7 +7,9 @@ from src.utils.helpers import handle_database_exception
 
 
 dev_mode = os.getenv("DEV_MODE")
-router = APIRouter()
+router = APIRouter(
+    tags=["patients"]
+)
 
 @router.post("/create-patient", response_model=PatientCreateRequest)
 async def create_patient(patient: PatientCreateRequest):
