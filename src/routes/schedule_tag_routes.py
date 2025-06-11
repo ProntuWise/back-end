@@ -8,6 +8,7 @@ from src.utils.helpers import handle_database_exception
 
 dev_mode = os.getenv("DEV_MODE")
 router = APIRouter(
+    prefix="/schedule-tags",
     tags=["schedule_tags"]
 )
 
